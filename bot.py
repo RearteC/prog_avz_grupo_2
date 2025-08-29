@@ -128,13 +128,36 @@ def post_to_slack(payload: Dict):
         )
 
 
-def cargar_preguntas():
-    raise Exception("Sorry, no hay implementacion")
+def cargar_preguntas(nuevas: List[Dict]):
+
+    if PROBLEMS_PATH.exists():
+        with PROBLEMS_PATH.open("r", encoding="utf-8") as f:
+            existentes = yaml.safe_load(f) or []
+    else:
+        existentes = []
+
+    existentes.extend(nuevas)
+
+    with PROBLEMS_PATH.open("w", encoding="utf-8") as f:
+        yaml.safe_dump(existentes, f, allow_unicode=True, sort_keys=False, indent=2)
+
+    print(f"Se agregaron {len(nuevas)} preguntas. Total: {len(existentes)}")
 
 def main():
     if not BOT_TOKEN or not CHANNEL_ID:
         raise RuntimeError("Faltan variables de entorno")
-    cargar_preguntas()
+    
+    nueva_pregunta = [
+        {
+            "title": "Calcula factorial",
+            "prompt": "Escribe factorial(n) que devuelva el factorial de n",
+            "hints": ["Usa un bucle for o recursión", "factorial(0) = 1"],
+            "tags": ["funciones", "bucles", "recursion"]
+        }
+    ]
+
+    cargar_preguntas(nueva_pregunta)
+    
     problems = load_problems()
     state = load_state(len(problems))
     prob = select_today(problems, state)
