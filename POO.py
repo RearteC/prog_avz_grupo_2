@@ -68,3 +68,9 @@ if __name__ == "__main__":
     # Cargar al YAML
     Preguntas.cargar_preguntas([p1, p2])
     print("Preguntas agregadas correctamente.")
+
+
+
+
+
+
