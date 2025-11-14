@@ -2,7 +2,7 @@
 
 ## Grupo 2 - Gradiente decadente
 ### - Diego Ottino
-### - Cristian Persivati
+### - Cristian Percivati
 ### - Jorge Rearte
 ### - Omar Vivona
 
