@@ -23,3 +23,24 @@ Para evaluar los modelos utilizamos diversas métricas:
 3. Cross validation, aplicada en todos los modelos salvo en árboles profundos, donde el proceso se vuelve computacionalmente muy costoso.
 
 Finalmente, registramos todas las evaluaciones y resultados en un documento almacenado en MongoDB Atlas. Cada vez que se ejecuta el proceso, se genera un nuevo documento que permite llevar un historial de las pruebas y mejoras del modelo, facilitando el análisis comparativo y la trazabilidad del desarrollo.
+
+## Workflow
+
+Incluimos un flujo con **papermill** que permite actualizar el entrenamiento a medida que se incorporen datasets nuevos, permitiendo ejecutar *runs*. Este flujo permite guardar los resultados de la selección de características, preprocesamiento del dataset, mejor modelo obtenido, y generación de evaluaciones (se guardan en MongoDB).
+
+La estructura de este pipeline es la siguiente:
+
+  1. EDA (selección de features) -> guarda las características de interés
+  2. Preprocesamiento (encoding+escalado) -> guarda el dataset preprocesado
+  3. Modelos (comparativa entre 3 modelos de ML) -> guarda el mejor modelo
+  4. Evaluación -> guarda las evaluaciones en mongodb
+
+*Es requerido usar clave y usuario de MongoDB en el orquestador para que funcione el paso 4.*
+
+## API y Serving
+
+Hicimos una breve API en FastAPI que permite hacer inferencia sobre el mejor modelo obtenido. Es un simple endpoint post que se comunica con una aplicación en Gradio que sirve de front. El usuario poniendo las características esenciales (m², barrio, baños, ambientes, tipo de propiedad) recibe como respuesta el precio estimado de venta del inmueble.
+
+<img width="1250" height="538" alt="image" src="https://github.com/user-attachments/assets/b286daf1-7b73-4c28-95c5-8f0393bea176" />
+
+
